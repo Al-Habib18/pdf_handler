@@ -1,6 +1,6 @@
 /** @format */
 
-function formatResults(data, subjectNames = {}) {
+function getFormatResults(data, subjectNames = {}) {
     // Map to store grouped data by subject code
     const formattedData = {};
 
@@ -11,7 +11,6 @@ function formatResults(data, subjectNames = {}) {
             // Extract the subject base code and type
             const [subjectBaseCode, type] = code.split("(");
             const isTheory = type === "T)";
-            const isPractical = type === "P)";
             const isBoth = type === "T,P)" || "P,T)";
 
             // If the subject code doesn't exist, initialize it
@@ -49,4 +48,4 @@ function formatResults(data, subjectNames = {}) {
     return Object.values(formattedData);
 }
 
-export default formatResults;
+module.exports = getFormatResults;

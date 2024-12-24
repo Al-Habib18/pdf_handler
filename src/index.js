@@ -1,19 +1,25 @@
 /** @format */
 
-import express from "express";
-import multer from "multer";
-import uploadController from "./controllers/upload2.js";
+require("dotenv").config();
+const http = require("http");
+const app = require("./app");
+// const { connectDB } = require("./db");
 
-const app = express();
-const port = 3003;
+const server = http.createServer(app);
 
-// Set up multer for file uploads
-const upload = multer({ dest: "uploads/" });
+let PORT = process.env.PORT || 3003;
 
-// Route to handle PDF uploads
-app.post("/upload", upload.single("file"), uploadController);
+const main = async () => {
+    try {
+        // await connectDB();
+        server.listen(PORT, () => {
+            console.log(`Server listening on port ${PORT}`);
+            // seedUser();  we used this for making fake users
+        });
+    } catch (e) {
+        console.log("Database error");
+        console.log(e);
+    }
+};
 
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+main();

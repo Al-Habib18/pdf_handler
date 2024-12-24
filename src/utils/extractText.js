@@ -1,4 +1,6 @@
 /** @format */
+const pkg = require("pdfjs-dist");
+const { getDocument } = pkg;
 
 const extractTextFromPDF = async (filePath) => {
     const loadingTask = getDocument(filePath);
@@ -16,4 +18,4 @@ const extractTextFromPDF = async (filePath) => {
     return fullText;
 };
 
-export default extractTextFromPDF;
+module.exports = extractTextFromPDF;

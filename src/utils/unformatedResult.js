@@ -1,5 +1,6 @@
 /** @format */
 
+const regex = /(\d{6})\s*\{\s*((?:\d{5}\(T\)(?:,\s*)?)*)\s*\}/g;
 const getUnformatedResult = (text) => {
     const results = [];
     let match;
@@ -15,4 +16,4 @@ const getUnformatedResult = (text) => {
     return results;
 };
 
-export default getUnformatedResult;
+module.exports = getUnformatedResult;
