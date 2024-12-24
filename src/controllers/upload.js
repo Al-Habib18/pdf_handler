@@ -51,4 +51,4 @@ const uploadController = async (req, res) => {
     }
 };
 
-export default uploadController;
+module.exports = uploadController;

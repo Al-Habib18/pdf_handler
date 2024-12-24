@@ -2,27 +2,15 @@
 
 import fs from "fs";
 import pkg from "pdfjs-dist";
-const { getDocument } = pkg;
+
+import extractTextFromPDF from "../utils/extractText";
+import getUnformatedResult from "../utils/unformatedResult";
+import formatResults from "../utils/formatedResult";
 
 // Regular expression to match roll numbers and subject codes
 // const regex = /\b\d{6}\{(\d{5}\(T\)(?:,\d{5}\(T\)))\}/g;
 const regex = /(\d{6})\s*\{\s*((?:\d{5}\(T\)(?:,\s*)?)*)\s*\}/g;
 
-const extractTextFromPDF = async (filePath) => {
-    const loadingTask = getDocument(filePath);
-    const pdfDoc = await loadingTask.promise;
-
-    let fullText = "";
-
-    for (let i = 1; i <= pdfDoc.numPages; i++) {
-        const page = await pdfDoc.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map((item) => item.str).join(" ");
-        fullText += pageText + "\n";
-    }
-
-    return fullText;
-};
 const uploadController = async (req, res) => {
     const filePath = req.file.path;
 
@@ -41,18 +29,9 @@ const uploadController = async (req, res) => {
 
         // Extract text from the PDF using pdfjs-dist
         const text = await extractTextFromPDF(filePath);
+        const unformatedResult = getUnformatedResult(text);
+        const results = formatResults(unformatedResult);
 
-        const results = [];
-        let match;
-
-        while ((match = regex.exec(text)) !== null) {
-            const rollNumber = match[1];
-            const subjectCodes = match[2]
-                .split(",")
-                .map((code) => code.trim())
-                .filter((code) => code);
-            results.push({ rollNumber, subjectCodes });
-        }
         res.json({ results });
     } catch (error) {
         console.error("Error processing PDF:", error);
