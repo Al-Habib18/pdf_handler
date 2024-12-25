@@ -1,11 +1,14 @@
 /** @format */
 const express = require("express");
 const routes = require("./routes");
+const morgan = require("morgan");
 
 // express app
 const app = express();
 
 // applyMiddleware(app);
+app.use(express.json());
+app.use(morgan("dev"));
 app.use(routes);
 
 app.get("/health", (req, res) => {
